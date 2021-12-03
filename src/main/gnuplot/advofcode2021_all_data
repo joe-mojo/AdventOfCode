@@ -1,0 +1,8 @@
+#!/usr/bin/gnuplot
+
+set terminal pngcairo size 1920,1080
+set xtics 100
+set ytics 100
+set grid xtics ytics back
+filelist = system("ls /home/joachim/Dev/Scala/scratchpad/target/scala-2.13/classes/2021/**/*.data")
+plot for [filename in filelist] filename using 1:2 with line title sprintf("%s", filename)
