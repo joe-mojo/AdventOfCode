@@ -10,7 +10,7 @@ lazy val root = (project in file(".")).
 				scalaVersion := "2.13.7",
 				version      := "1.0.0"
 			)),
-			name := "Scratchpad",
+			name := "Advent of code",
 			scalacOptions ++= Seq(
 				"-language:postfixOps",
 				"-Xmacro-settings:materialize-derivations"
