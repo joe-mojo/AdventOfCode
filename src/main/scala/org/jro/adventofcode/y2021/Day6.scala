@@ -2,7 +2,6 @@ package org.jro.adventofcode.y2021
 
 import org.jro.adventofcode
 
-import scala.collection.mutable.ListBuffer
 import scala.collection.mutable.{Map => MMap}
 
 object Day6 {

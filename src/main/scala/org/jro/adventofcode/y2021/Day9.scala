@@ -6,9 +6,7 @@ import org.jro.adventofcode.Error
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.Executors
-import scala.annotation.tailrec
 import scala.concurrent.{Await, ExecutionContext, Future}
-//import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.collection.mutable.{Set => MSet}
 
