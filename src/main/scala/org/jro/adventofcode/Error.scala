@@ -34,6 +34,7 @@ object Error {
 	case class UnknownEnumValue[EnumT: ClassTag](override val input: String) extends InputError {
 		val ofType: Class[_] = ClassTag.getClass
 	}
+	case class UnexpectedValue(label: String, expected: String, actual: String) extends SingleError
 	case class Errors(head: SingleError, tail: Seq[SingleError] = Seq.empty[SingleError]) extends ErrorNEL {
 		def append(error: SingleError): Errors = Errors(this.head, this.tail :+ error)
 		def appendAll(errors: Errors): Errors = Errors(this.head, (this.tail :+ errors.head) ++ errors.tail)
