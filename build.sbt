@@ -1,13 +1,13 @@
 import Dependencies._
 
 resolvers += Resolver.bintrayRepo("hseeberger", "maven")
-scalacOptions += "-Xmacro-settings:materialize-derivations"
+scalacOptions ++= Seq("--explain", "--print-lines", "-Xprint-inline")
 
 lazy val root = (project in file(".")).
 		settings(
 			inThisBuild(List(
 				organization := "org.jro",
-				scalaVersion := "2.13.7",
+				scalaVersion := "3.3.1",
 				version      := "1.0.0"
 			)),
 			name := "Advent of code",

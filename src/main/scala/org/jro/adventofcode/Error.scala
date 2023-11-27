@@ -54,6 +54,7 @@ object Error {
 				case (Right(_), Left(err:SingleError)) => Left(Errors(err))
 				case (l@Left(_), Right(_)) => l
 				case (Left(errors:Errors), Left(error:SingleError)) => Left(errors and error)
+				case (Left(leftErrors:Errors), Left(rightErrors:Errors)) => Left(leftErrors and rightErrors)
 			}
 		}
 	}

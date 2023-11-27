@@ -1,10 +1,10 @@
 import sbt._
 
 object Dependencies {
-	val akkaVersion = "2.6.8"
-	val sprayVersion = "10.2.1"
+	val akkaVersion = "2.6.8" // TODO update
+	val sprayVersion = "10.2.1" // TODO update
 	
-	lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.2"
+	lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.15"
 	lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % sprayVersion
 	lazy val akkaHttpTestkit = "com.typesafe.akka" %% "akka-http-testkit" % sprayVersion
 	lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion

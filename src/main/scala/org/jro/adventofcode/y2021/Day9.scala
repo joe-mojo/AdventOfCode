@@ -6,12 +6,12 @@ import org.jro.adventofcode.Error
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.Executors
-import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.concurrent.duration._
-import scala.collection.mutable.{Set => MSet}
+import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor, Future}
+import scala.concurrent.duration.*
+import scala.collection.mutable.Set as MSet
 
 object Day9 {
-	implicit val ec = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(12))
+	implicit val ec: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(12))
 	case class Point(row: Int, col: Int, heigt: Int)
 	case class Basin(lowest: Point, allPoints: Set[Point]){
 		def size: Int = allPoints.size

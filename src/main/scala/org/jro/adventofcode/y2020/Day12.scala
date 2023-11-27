@@ -6,6 +6,7 @@ import org.jro.adventofcode.Error.UnknownEnumValue
 import org.jro.adventofcode.y2020.Day12.Action.{Move, MoveE, MoveF, MoveN, Oriented, TurnL, TurnR}
 import org.jro.adventofcode.y2020.Day12.Direction.{East, North, South, West, values}
 
+import scala.annotation.targetName
 import scala.util.matching.Regex
 
 object Day12 {
@@ -21,18 +22,21 @@ object Day12 {
 		 */
 	}
 	object Angle {
+		@targetName("_90deg")
 		case object `90°` extends Angle {
 			override val degrees = 90
 			override def dirDelta: Int = 1
 			override def rotateLeftAroundOrigin(pos: Position): Position = Position(-pos.y, pos.x)
 			override def rotateRightAroundOrigin(pos: Position): Position = - rotateLeftAroundOrigin(pos)
 		}
+		@targetName("_180deg")
 		case object `180°` extends Angle {
 			override val degrees = 180
 			override def dirDelta: Int = 2
 			override def rotateLeftAroundOrigin(pos: Position): Position = Position(-pos.x, -pos.y)
 			override def rotateRightAroundOrigin(pos: Position): Position = rotateLeftAroundOrigin(pos)
 		}
+		@targetName("_270deg")
 		case object `270°` extends Angle {
 			override val degrees = 270
 			override def dirDelta: Int = 3
@@ -90,19 +94,19 @@ object Day12 {
 
 		def of(value: String): scala.util.Either[Error, Action] = {
 			value match {
-				case Action.Pattern("N", num) => parseInt(num).map(MoveN)
-				case Action.Pattern("E", num) => parseInt(num).map(MoveE)
-				case Action.Pattern("S", num) => parseInt(num).map(MoveS)
-				case Action.Pattern("W", num) => parseInt(num).map(MoveW)
-				case Action.Pattern("F", num) => parseInt(num).map(MoveF)
+				case Action.Pattern("N", num) => parseInt(num).map(MoveN.apply)
+				case Action.Pattern("E", num) => parseInt(num).map(MoveE.apply)
+				case Action.Pattern("S", num) => parseInt(num).map(MoveS.apply)
+				case Action.Pattern("W", num) => parseInt(num).map(MoveW.apply)
+				case Action.Pattern("F", num) => parseInt(num).map(MoveF.apply)
 				case Action.Pattern("R", num) =>
 					parseInt(num).flatMap{ n =>
 						Angle.of(n).fold[Either[Error, Angle]](Left(UnknownEnumValue[Angle](num)))(Right(_))
-					}.map(TurnR)
+					}.map(TurnR.apply)
 				case Action.Pattern("L", num) =>
 					parseInt(num).flatMap{ n =>
 						Angle.of(n).fold[Either[Error, Angle]](Left(UnknownEnumValue[Angle](num)))(Right(_))
-					}.map(TurnL)
+					}.map(TurnL.apply)
 			}
 		}
 

@@ -36,7 +36,7 @@ object Day4 {
 	}
 
 	def main(args: Array[String]): Unit = {
-		val nbPasswds = Min to Max count { n: Int =>
+		val nbPasswds = Min to Max count { (n: Int) =>
 			containsPair(n) && hasIncreasingDigits(n)
 		}
 		println(s"Day4-1 answer: $nbPasswds passwords between $Min and $Max") //Day4-1: 1764

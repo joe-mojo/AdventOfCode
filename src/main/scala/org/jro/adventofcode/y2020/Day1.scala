@@ -48,7 +48,7 @@ object Day1 extends App {
 		case other => other.toString
 	})*/
 
-	println(puzzleTwo("2020/day1/input1") match {
+	println((puzzleTwo("2020/day1/input1"): @unchecked) match {
 		case Right(Some(res2)) => println(s"$res2 : sum = ${res2.sum} ; product = ${res2.product}")
 	}
 	)
