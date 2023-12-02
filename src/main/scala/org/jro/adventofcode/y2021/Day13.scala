@@ -59,7 +59,7 @@ object Day13 {
 	}
 
 
-	def parseInputLines(lines: Iterator[String]): (Seq[Dot], Seq[Fold]) = {
+	def parseInputLines(lines: Iterable[String]): (Seq[Dot], Seq[Fold]) = {
 		val dots = lines.takeWhile(_.nonEmpty).map(Dot.from).toSeq
 		val folds = lines.map(Fold.from).toSeq
 		(dots, folds)
@@ -146,7 +146,7 @@ object Day13 {
 						   |fold along y=7
 						   |fold along x=5
 						   |""".stripMargin.split("\\n")
-		val sampleData: (Seq[Dot], Seq[Fold]) = parseInputLines(sampleLines.iterator)
+		val sampleData: (Seq[Dot], Seq[Fold]) = parseInputLines(sampleLines)
 		println(sampleData)
 		println(renderDotsAsTxt(sampleData._1, sampleData._2.head))
 		println(s"Sample: ${puzzle(sampleData._1, sampleData._2.head)}")

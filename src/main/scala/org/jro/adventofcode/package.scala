@@ -39,8 +39,8 @@ package object adventofcode {
 			InputData(year, day, resource, source)
 		}
 	}
-	def getInputLines(year: Int, day: Int): Either[Error, Iterator[String]] = {
-		getInputData(year, day).map(_.source.getLines())
+	def getInputLines(year: Int, day: Int): Either[Error, Iterable[String]] = {
+		getInputData(year, day).map(_.source.getLines().to(Iterable))
 	}
 
 	def parseInt(value: String): Either[NaN, Int] = {
