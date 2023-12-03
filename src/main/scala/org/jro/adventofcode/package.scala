@@ -42,6 +42,12 @@ package object adventofcode {
 	def getInputLines(year: Int, day: Int): Either[Error, Iterable[String]] = {
 		getInputData(year, day).map(_.source.getLines().to(Iterable))
 	}
+	
+	def getInputLinesOrThrow(year: Int, day: Int): Iterable[String] = {
+		getInputLines(year, day) match
+			case Right(lines) => lines
+			case Left(err) => throw new RuntimeException(err.toString)
+	}
 
 	def parseInt(value: String): Either[NaN, Int] = {
 		Try(value.toInt).fold[Either[NaN, Int]](_ => Left(NaN(value)), Right(_))
