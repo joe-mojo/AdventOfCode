@@ -3,15 +3,17 @@ package org.jro.adventofcode.y2023
 import org.jro.adventofcode
 import org.jro.adventofcode.{getInputLines, getInputLinesOrThrow}
 
+import scala.annotation.tailrec
+
 /**
  * @author joe_mojo.
  *         2023/12/03
  */
 object Day3 {
 	case class LocatedChar(char: Char, row: Int, col: Int)
-	case class LocatedNumber(chars: Seq[LocatedChar]){
+	case class LocatedNumber(chars: Set[LocatedChar]){
 		def toInt: Int = {
-			chars.sortBy(lc => lc.col).map(_.char).mkString.toInt
+			String(chars.toSeq.sortBy(lc => lc.col).map(_.char).toArray).toInt
 		}
 	}
 
@@ -19,8 +21,8 @@ object Day3 {
 
 	def  findDigitsAround(lines: IndexedSeq[String], row: Int, col: Int): Seq[LocatedChar] ={
 		(for {
-			cRow <- (row - 1) until (row + 1)
-			cCol <- (col - 1) until (col + 1)
+			cRow <- (row - 1) to (row + 1)
+			cCol <- (col - 1) to (col + 1)
 		} yield (cRow, cCol)).filter {
 			case (`row`, `col`) => false
 			case (r, c) if r < 0 || c < 0 || r > lines.length || c > lines.head.length => false
@@ -29,28 +31,37 @@ object Day3 {
 		}.map(loc => LocatedChar(lines(loc._1)(loc._2), loc._1, loc._2))
 	}
 
-	def findNumbersAround(lines: IndexedSeq[String], row: Int, col: Int): Seq[Int] = {
-		def findNumberDigitsAround(row: Int, col: Int, lines: IndexedSeq[String], locatedDigits: Seq[LocatedChar], result: Set[LocatedNumber]): Int = {
-			0 //TODO
+	def findNumbersAround(lines: IndexedSeq[String], row: Int, col: Int): Set[Int] = {
+		def completeNumber(dir: Int, currentRow: Int, currentCol: Int, line: String, locatedDigits: Set[LocatedChar]): Set[LocatedChar] = {
+			if(currentRow >= 0 && currentRow < line.length) {
+				if(line(currentRow).isDigit) {
+					// FIXME on ne passe pas ici ???
+					completeNumber(dir, currentRow + dir, currentCol, line,  locatedDigits + LocatedChar(line(currentRow), currentRow, currentCol))
+				} else locatedDigits
+			} else locatedDigits
 		}
-		val locatedDigits = findDigitsAround(lines, row, col)
-		//TODO
+		val locatedNumbers: Set[LocatedNumber] = findDigitsAround(lines, row, col).map(lc =>
+			LocatedNumber(completeNumber(1, lc.row, lc.col, lines(lc.row), Set.empty) ++
+				completeNumber(-1, lc.row, lc.col, lines(lc.row), Set.empty))
+		).toSet
+		locatedNumbers.map(_.toInt)
 	}
 
 	def puzzle1(lines: IndexedSeq[String]): Int = {
 		// Hypothèse : un nombre a au plus 1 seul symbol adjacent.
 		// Corrolaire : pas de doublons de nombre
 		(for {
-			row <- 0 to lines.length
-			col <- 0 to lines(0).length
+			row <- 0 until lines.length
+			col <- 0 until lines(0).length
 		} yield {
 			if(isSymbol(lines(row)(col))){
 				findNumbersAround(lines, row, col)
 			} else Seq.empty[Int]
 		}).flatten.sum
-
 	}
-}
+
 	def main(args: Array[String]): Unit = {
-		val lines = getInputLinesOrThrow(2023, 3).toIndexedSeq
+		val lines: IndexedSeq[String] = getInputLinesOrThrow(2023, 3).toIndexedSeq
+		println(puzzle1(lines))
+	}
 }
