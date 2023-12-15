@@ -48,8 +48,8 @@ object Day6 {
 
 
 	def main(args: Array[String]): Unit = {
-		println(s"Sample: ways to beat records = ${puzzle1(Input.Sample)}")
+		println(s"Sample: ways to beat records = ${puzzle1(Input.Sample)}") // 288, OK
 		println(s"Actual input: ways to beat records = ${Input.Main.raceRecords.map(rec => rec.generateRaceParams.map(_.race).withFilter(_.distance > rec.distance).length)}")
-		println(s"Actual input: puzzle1 result = ${puzzle1(Input.Main)}")
+		println(s"Actual input: puzzle1 result = ${puzzle1(Input.Main)}") //FIXME 3186225 is too low
 	}
 }
