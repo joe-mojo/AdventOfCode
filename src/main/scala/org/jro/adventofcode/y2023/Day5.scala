@@ -160,7 +160,7 @@ object Day5 {
 		println(s"Puzzle1 with input = ${puzzle1(input)}") // 88151870
 		println()
 
-		println(s"Puzzle2 with sample = ${puzzle2(sample.toInput2)}")
-		println(s"Puzzle2 with input = ${puzzle2(input.toInput2)}")
+		println(s"Puzzle2 with sample = ${puzzle2(sample.toInput2)}") // 46
+		println(s"Puzzle2 with input = ${puzzle2(input.toInput2)}") // 2008785
 	}
 }
