@@ -1,11 +1,16 @@
 package org.jro.adventofcode.y2023
 
+import jdk.internal.org.jline.utils.Display
 import org.jro.adventofcode
 import org.jro.adventofcode.getInputLinesOrThrow
 import org.jro.adventofcode.y2023.Day5.*
 
+import java.util.concurrent.Executors
+import scala.collection.immutable.NumericRange
 import scala.util.matching.Regex
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 case class Day5(seeds: Set[Int], steps: Seq[Step]) {
 
@@ -29,13 +34,18 @@ object Day5 {
 			value >= srcStart && value <= srcEnd
 		}
 	}
-	case class Input(seeds: Seq[Long], steps: Seq[Step])
 
-	def parseLines(lines: Iterable[String]): Input = {
+	case class Input1(seeds: Seq[Long], steps: Seq[Step]) {
+		def toInput2: Input2 = Input2(seeds.sliding(2, 2).map(seedDef => seedDef(0) until (seedDef(0) + seedDef(1))).toSeq, steps)
+
+	}
+	case class Input2(seedRanges: Seq[NumericRange.Exclusive[Long]], steps: Seq[Step])
+
+	def parseLines(lines: Iterable[String]): Input1 = {
 		val seeds = lines.head.split("""\s""").tail.map(_.toLong).toSeq
 		println(s"Parsed seeds: $seeds")
 
-		Input(seeds= seeds, steps = StepsParser.parseSteps(lines.tail))
+		Input1(seeds= seeds, steps = StepsParser.parseSteps(lines.tail))
 	}
 
 	object StepsParser {
@@ -70,22 +80,48 @@ object Day5 {
 
 	}
 
-	def puzzle1(lines: Iterable[String]): Long = {
-		val input: Input = parseLines(lines)
-		val locations: Seq[Long] = input.seeds.map { seed =>
-			val location = input.steps.foldLeft(seed) { (value, step) =>
+	def findLocations(seeds: Iterator[Long], steps:Seq[Step], display: Boolean): Iterator[Long] = {
+		seeds.map { seed =>
+			val location = steps.foldLeft(seed) { (value, step) =>
 				step.map(value)
 			}
-			println(s"seed $seed --> location $location")
+			if (display) println(s"seed $seed --> location $location")
 			location
 		}
+	}
+
+	def puzzle1(input: Input1): Long = {
+		val locations: Seq[Long] = findLocations(input.seeds.iterator, input.steps, true).toSeq
 		locations.min
+	}
+
+	def splitRange(range: NumericRange.Exclusive[Long]): Seq[NumericRange.Exclusive[Long]] = {
+		val middle = range.start + ((range.end - range.start) / 2L)
+		Seq(
+			range.start until middle,
+			middle until range.end
+		)
+	}
+
+	def puzzle2(input: Input2): Long = {
+		implicit val ec: scala.concurrent.ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(12))
+		val splitRanges: Seq[NumericRange.Exclusive[Long]] = input.seedRanges.flatMap(splitRange)
+		println(s"Input2 ranges to run: $splitRanges")
+		val minimums: Seq[Future[Long]] = splitRanges.map { range =>
+			Future {
+				findLocations(range.iterator, input.steps, false).min
+			}.map { min =>
+				println(s"Found min for range $range = $min")
+				min
+			}
+		}
+		Await.result(Future.sequence(minimums).map(_.min), Duration.Inf)
 	}
 
 
 
 	def main(args: Array[String]): Unit = {
-		val sample = """seeds: 79 14 55 13
+		val sampleLines = """seeds: 79 14 55 13
 					   |
 					   |seed-to-soil map:
 					   |50 98 2
@@ -118,8 +154,13 @@ object Day5 {
 					   |humidity-to-location map:
 					   |60 56 37
 					   |56 93 4""".stripMargin.split("""\n""").toIndexedSeq
+		val sample = parseLines(sampleLines)
 		println(s"Puzzle1 with sample = ${puzzle1(sample)}")
-		val lines: Iterable[String] = getInputLinesOrThrow(2023, 5)
-		println(s"Puzzle1 with input = ${puzzle1(lines)}")
+		val input: Input1 = parseLines(getInputLinesOrThrow(2023, 5))
+		println(s"Puzzle1 with input = ${puzzle1(input)}") // 88151870
+		println()
+
+		println(s"Puzzle2 with sample = ${puzzle2(sample.toInput2)}")
+		println(s"Puzzle2 with input = ${puzzle2(input.toInput2)}")
 	}
 }
