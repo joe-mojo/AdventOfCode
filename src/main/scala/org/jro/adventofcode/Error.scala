@@ -6,18 +6,21 @@ import scala.reflect.ClassTag
 import scala.util.matching.Regex
 
 sealed trait Error {
-	def and(error: SingleError): Errors
-	def and(errors: Errors): Errors
+	infix def and(error: SingleError): Errors
+	infix def and(errors: Errors): Errors
 }
 sealed trait SingleError extends Error {
-	def and(error: SingleError): Errors = {
+	infix def and(error: SingleError): Errors = {
 		Errors(this, Seq(error))
 	}
-	def and(errors: Errors): Errors = {
+	infix def and(errors: Errors): Errors = {
 		Errors(this, errors.head +: errors.tail)
 	}
 }
-sealed trait ErrorNEL extends Error
+sealed trait ErrorNEL extends Error {
+	def head : SingleError
+	def tail : Seq[SingleError]
+}
 object Error {
 	sealed trait InputError extends SingleError {
 		def input: String
@@ -32,16 +35,16 @@ object Error {
 	case class NaN(override val input: String) extends InputError
 	case class WrongSplit(override val input: String, splitRegex: Regex, expectedParts: Int, actualParts: Int) extends InputError
 	case class UnknownEnumValue[EnumT: ClassTag](override val input: String) extends InputError {
-		val ofType: Class[_] = ClassTag.getClass
+		val ofType: Class[?] = ClassTag.getClass
 	}
 	case class UnexpectedValue(label: String, expected: String, actual: String) extends SingleError
-	case class Errors(head: SingleError, tail: Seq[SingleError] = Seq.empty[SingleError]) extends ErrorNEL {
+	case class Errors(override  val head: SingleError, override val tail: Seq[SingleError] = Seq.empty[SingleError]) extends ErrorNEL {
 		def append(error: SingleError): Errors = Errors(this.head, this.tail :+ error)
 		def appendAll(errors: Errors): Errors = Errors(this.head, (this.tail :+ errors.head) ++ errors.tail)
-		override def and(error: SingleError): Errors = {
+		override infix def and(error: SingleError): Errors = {
 			Errors(this.head, this.tail :+ error)
 		}
-		override def and(errors: Errors): Errors = {
+		override infix def and(errors: Errors): Errors = {
 			Errors(this.head, (this.tail :+ errors.head) ++ errors.tail)
 		}
 	}

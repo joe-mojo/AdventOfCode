@@ -43,7 +43,7 @@ object Day2 {
 	}
 
 	private[y2023] def parseDraws(drawsLine: String): Seq[CubeDraw] = {
-		drawsLine.split(";").map(parseDraw)
+		drawsLine.split(";").toIndexedSeq.map(parseDraw)
 	}
 
 	private[y2023] def parseDraw(draw: String): CubeDraw = {

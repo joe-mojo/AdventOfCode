@@ -18,13 +18,13 @@ object Day6 {
 	object QGroup {
 		val PersonSeparator: Regex = """\n""".r
 		def fromTxt(groupTxt: String): QGroup = {
-			QGroup(PersonSeparator.split(groupTxt))
+			QGroup(PersonSeparator.split(groupTxt).toIndexedSeq)
 		}
 	}
 
 	val GroupSeparator: Regex = """\n\n""".r
 	def parseInput(txt: String): Seq[QGroup] = {
-		GroupSeparator.split(txt).map(QGroup.fromTxt)
+		GroupSeparator.split(txt).toIndexedSeq.map(QGroup.fromTxt)
 	}
 
 	def puzzle1(inputTxt: String): Int = {

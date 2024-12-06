@@ -68,7 +68,7 @@ type Path = Seq[Cave]
 object Day12 {
 
 	def parseLine(line: String): Arc =
-		Arc(line.split("-").map(Cave.createCaveWithName))
+		Arc(line.split("-").toIndexedSeq.map(Cave.createCaveWithName))
 
 	def loadInput(): Either[Error, Map[Cave, Set[Cave]]] = {
 		getInputLines(2021, 12).map(_.map(parseLine).foldLeft(Map.empty[Cave, Set[Cave]]){ (map, arc) =>

@@ -56,7 +56,7 @@ class Day12Spec extends AnyFreeSpec with Matchers with EitherValues {
 	"Boat when" - {
 		"execution small sample actions should" - {
 			"should finish at (17 ; -8)" in {
-				val actualActions: Seq[Action] = Error.sequence(smallSample.split("""\n""").map(Action.of)).right.value
+				val actualActions: Seq[Action] = Error.sequence(smallSample.split("""\n""").toIndexedSeq.map(Action.of)).value
 
 				val finalBoat: Boat = puzzle1(actualActions)
 
@@ -68,7 +68,7 @@ class Day12Spec extends AnyFreeSpec with Matchers with EitherValues {
 	"Boat2 when" - {
 		"execution small sample actions should" - {
 			"should finish at (214 ; -72)" in {
-				val actualActions: Seq[Action] = Error.sequence(smallSample.split("""\n""").map(Action.of)).right.value
+				val actualActions: Seq[Action] = Error.sequence(smallSample.split("""\n""").toIndexedSeq.map(Action.of)).value
 
 				val finalBoat: Boat2 = puzzle2(actualActions)
 

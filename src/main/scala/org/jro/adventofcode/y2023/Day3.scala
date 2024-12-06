@@ -33,10 +33,10 @@ object Day3 {
 
 	def findNumbersAround(lines: IndexedSeq[String], row: Int, col: Int): Set[Int] = {
 		def completeNumber(dir: Int, currentRow: Int, currentCol: Int, line: String, locatedDigits: Set[LocatedChar]): Set[LocatedChar] = {
-			if(currentRow >= 0 && currentRow < line.length) {
-				if(line(currentRow).isDigit) {
+			if(currentCol >= 0 && currentCol < line.length) {
+				if(line(currentCol).isDigit) {
 					// FIXME on ne passe pas ici ???
-					completeNumber(dir, currentRow + dir, currentCol, line,  locatedDigits + LocatedChar(line(currentRow), currentRow, currentCol))
+					completeNumber(dir, currentRow, currentCol + dir, line,  locatedDigits + LocatedChar(line(currentCol), currentRow, currentCol))
 				} else locatedDigits
 			} else locatedDigits
 		}
@@ -51,7 +51,7 @@ object Day3 {
 		// Hypothèse : un nombre a au plus 1 seul symbol adjacent.
 		// Corrolaire : pas de doublons de nombre
 		(for {
-			row <- 0 until lines.length
+			row <- lines.indices
 			col <- 0 until lines(0).length
 		} yield {
 			if(isSymbol(lines(row)(col))){
@@ -62,6 +62,6 @@ object Day3 {
 
 	def main(args: Array[String]): Unit = {
 		val lines: IndexedSeq[String] = getInputLinesOrThrow(2023, 3).toIndexedSeq
-		println(puzzle1(lines))
+		println(puzzle1(lines)) // 498559
 	}
 }

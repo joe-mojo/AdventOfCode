@@ -85,7 +85,7 @@ class Day11Spec extends AnyFreeSpec with Matchers with  Inside with EitherValues
 
 		"find ajdacent indices when" - {
 			"build from smallSample" in {
-				val sm: SeatMap = SeatMap.ofLines(smallSample.split("\n").iterator).right.value
+				val sm: SeatMap = SeatMap.ofLines(smallSample.split("\n").iterator).value
 				sm.adjacentIndices(0, 0) should contain theSameElementsAs Seq((1, 0), (1,1), (0,1))
 				sm.adjacentIndices(1, 0) should contain theSameElementsAs Seq(
 					(2, 0), (2,1), (1,1), (0, 1), (0, 0)
@@ -99,7 +99,7 @@ class Day11Spec extends AnyFreeSpec with Matchers with  Inside with EitherValues
 
 		"count adjacent occupied seats when" - {
 			"build from smallSample" in {
-				val sm: SeatMap = SeatMap.ofLines(smallSample.split("\n").iterator).right.value
+				val sm: SeatMap = SeatMap.ofLines(smallSample.split("\n").iterator).value
 				sm.adjacentStatuses(0, 0) should contain theSameElementsAs Seq(
 					Floor, EmptySeat, EmptySeat
 				)
@@ -107,7 +107,7 @@ class Day11Spec extends AnyFreeSpec with Matchers with  Inside with EitherValues
 				sm.adjacentOccupiedStatusCount(1, 0) shouldBe 0
 			}
 			"build from smallSampleR4" in {
-				val sm: SeatMap = SeatMap.ofLines(smallSampleR4.split("\n").iterator).right.value
+				val sm: SeatMap = SeatMap.ofLines(smallSampleR4.split("\n").iterator).value
 				sm.adjacentStatuses(0, 0) should contain theSameElementsAs Seq(
 					Floor, EmptySeat, OccupiedSeat
 				)
@@ -116,7 +116,7 @@ class Day11Spec extends AnyFreeSpec with Matchers with  Inside with EitherValues
 		}
 
 		"compute next state" in {
-			val sm: SeatMap = SeatMap.ofLines(smallSample.split("\n").iterator).right.value
+			val sm: SeatMap = SeatMap.ofLines(smallSample.split("\n").iterator).value
 
 			Seq(smallSampleR2, smallSampleR3, smallSampleR4, smallSampleR5, smallSampleR6).zipWithIndex.
 				foldLeft(sm) { (formerMap, newSampleAndIndex) =>
@@ -129,7 +129,7 @@ class Day11Spec extends AnyFreeSpec with Matchers with  Inside with EitherValues
 
 		"stop changing" - {
 			"at step 37 when starting with smallSample" in {
-				val sm: SeatMap = SeatMap.ofLines(smallSample.split("\n").iterator).right.value
+				val sm: SeatMap = SeatMap.ofLines(smallSample.split("\n").iterator).value
 
 				val rounds: LazyList[(SeatMap, Int)] = LazyList.iterate((sm, 0)){
 					case (currentSeatMap, index) => (currentSeatMap.nextSeatMap, index + 1)

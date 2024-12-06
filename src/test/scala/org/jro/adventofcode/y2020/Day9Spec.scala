@@ -28,7 +28,7 @@ class Day9Spec extends AnyFreeSpec with Matchers with Inside {
 													|299
 													|277
 													|309
-													|576""".stripMargin.split("""\n""").map(_.toLong)
+													|576""".stripMargin.split("""\n""").toIndexedSeq.map(_.toLong)
 
 	"Validity check for last 25 numbers should" - {
 		"validate acceptable numbers" in {

@@ -9,7 +9,7 @@ case class Point2(x: Int, y: Int) {
 		Point2(x + v.dx, y + v.dy)
 	}
 
-	def anchor(v: Vector2): AnchoredVector2 = {
+	infix def anchor(v: Vector2): AnchoredVector2 = {
 		AnchoredVector2(this, v)
 	}
 }

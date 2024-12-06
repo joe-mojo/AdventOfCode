@@ -49,11 +49,11 @@ object Day4 extends App {
 			override def valid(value: String): Boolean = HashColor.matches(value)
 		}
 		case object Ecl extends FieldName {
-			val AcceptedValues = "amb blu brn gry grn hzl oth".split(" ").toSet
+			val AcceptedValues: Set[String] = "amb blu brn gry grn hzl oth".split(" ").toSet
 			override def valid(value: String): Boolean = AcceptedValues.contains(value)
 		}
 		case object Pid extends FieldName {
-			val `9digits` = """\d{9}""".r
+			val `9digits`: Regex = """\d{9}""".r
 			override def valid(value: String): Boolean = `9digits`.matches(value)
 		}
 		case object Cid extends FieldName {
@@ -62,7 +62,7 @@ object Day4 extends App {
 		}
 
 		val values: IndexedSeq[FieldName] = IndexedSeq(Byr, Iyr, Eyr, Hgt, Hcl, Ecl, Pid, Cid)
-		val mandatoryFieldNames: Set[FieldName] = Set(values: _*) - Cid
+		val mandatoryFieldNames: Set[FieldName] = Set(values*) - Cid
 
 		def fromSymbol(symbol: String): Option[FieldName] = {
 			values.find(_.toString.toLowerCase == symbol.toLowerCase)
@@ -98,7 +98,7 @@ object Day4 extends App {
 	val DocSeparator: Regex = """\n\n""".r
 
 	def parseInput(txt: String): Seq[Document] = {
-		DocSeparator.split(txt).map(parseDocument)
+		DocSeparator.split(txt).toIndexedSeq.map(parseDocument)
 	}
 
 	val FieldSeparator: Regex = """\s""".r
@@ -117,7 +117,7 @@ object Day4 extends App {
 	}
 
 	def parseInput2(txt: String): Seq[Document2] = {
-		DocSeparator.split(txt).map(parseDocument2)
+		DocSeparator.split(txt).toIndexedSeq.map(parseDocument2)
 	}
 
 	def parseDocument2(docTxt: String): Document2 = {
