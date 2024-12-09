@@ -68,4 +68,13 @@ package object adventofcode {
 	def getResourceFolder(year: Int, day: Int): Either[Error, Path] = {
 		findResource(s"$year/day$day").map(url => Path.of(url.toURI))
 	}
+	
+	def classicMain[R](year: Int)(day: Int, puzzle1: Iterator[String] => R = (iter) => ???, puzzle2: Iterator[String] => R = (iter) => ???): Unit = {
+		getInputLines(year, day) match
+			case Right(lines) =>
+				println(s"Puzzle 1 = ${puzzle1(lines.iterator)}")
+				println(s"Puzzle 2 = ${puzzle2(lines.iterator)}")
+			case Left(err) =>
+				println(s"Puzzle input didn't load ! Reason:\n $err")
+	}
 }
