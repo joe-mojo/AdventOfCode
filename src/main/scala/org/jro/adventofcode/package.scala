@@ -32,13 +32,16 @@ package object adventofcode {
 		getSource(getResourceNameOf(year, day))
 	}
 
-	case class InputData(year: Int, day: Int, resource: String, source: Source)
+	case class InputData(year: Int, day: Int, resource: String, source: Source) extends AutoCloseable {
+		override def close(): Unit = source.close()
+	}
 	def getInputData(year: Int, day: Int): Either[Error, InputData] = {
 		val resource = getResourceNameOf(year, day)
 		getSource(resource).map { source =>
 			InputData(year, day, resource, source)
 		}
 	}
+
 	def getInputLines(year: Int, day: Int): Either[Error, Iterable[String]] = {
 		getInputData(year, day).map(_.source.getLines().to(Iterable))
 	}
@@ -60,7 +63,7 @@ package object adventofcode {
 	def writeToFile(lines: IterableOnce[String], outputPath: Path): Either[Error, Unit] = {
 			Try {
 				val w = new BufferedWriter(new FileWriter(outputPath.toFile), 8*1024)
-				lines.iterator.foreach(w.write(_))
+				lines.iterator.foreach(w.write)
 				w.close()
 			}.toEither.left.map(err => IOError(outputPath.toString, err))
 	}
