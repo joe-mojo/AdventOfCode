@@ -33,7 +33,12 @@ object Error {
 	case class NotMatching(override val input: String, regex: Regex) extends InputError
 	case class Empty(override val input: String) extends InputError
 	case class NaN(override val input: String) extends InputError
-	case class WrongSplit(override val input: String, splitRegex: Regex, expectedParts: Int, actualParts: Int) extends InputError
+	sealed trait WrongSplitError extends InputError {
+		def splitRegex: Regex
+		def actualParts: Int
+	}
+	case class WrongFixedSplit(override val input: String, override val splitRegex: Regex, expectedParts: Int, override val actualParts: Int) extends WrongSplitError
+	case class WrongVariableSplit(override val input: String, override val splitRegex: Regex, override val actualParts: Int, message: String) extends WrongSplitError
 	case class UnknownEnumValue[EnumT: ClassTag](override val input: String) extends InputError {
 		val ofType: Class[?] = ClassTag.getClass
 	}

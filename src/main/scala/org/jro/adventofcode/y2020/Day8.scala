@@ -1,7 +1,7 @@
 package org.jro.adventofcode.y2020
 
 import org.jro.adventofcode.{Error, getInputSourceOf}
-import org.jro.adventofcode.Error.{NaN, UnknownEnumValue, WrongSplit}
+import org.jro.adventofcode.Error.{NaN, UnknownEnumValue, WrongFixedSplit}
 import org.jro.adventofcode.y2020.Day8.Operator.{Jmp, Nop}
 import org.jro.adventofcode.y2020.Day8.Status.{InfiniteLoop, TerminatedOK}
 
@@ -43,7 +43,7 @@ object Day8 {
 		val OnSpace: Regex = """ """.r
 		def ofLine(value: String): Either[Error, Instruction] = {
 			val ops = OnSpace.split(value.trim)
-			if(ops.length < 2) Left(WrongSplit(value, OnSpace, 2, ops.length))
+			if(ops.length < 2) Left(WrongFixedSplit(value, OnSpace, 2, ops.length))
 			else {
 				Operator.of(ops.head).fold[Either[Error, Operator]](
 					Left(UnknownEnumValue[Operator](ops.head))

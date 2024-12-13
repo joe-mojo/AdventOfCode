@@ -1,6 +1,6 @@
 package org.jro.adventofcode.y2021
 import org.jro.adventofcode.{Error, getInputData}
-import org.jro.adventofcode.Error.{NaN, WrongSplit}
+import org.jro.adventofcode.Error.{NaN, WrongFixedSplit}
 
 import scala.util.Try
 
@@ -55,7 +55,7 @@ object Day2 extends App {
 
 	def parseLine(line: String): Either[Error, (Command, Int)] = {
 		val splitLine = line.split(" ")
-		if (splitLine.length != 2) Left(WrongSplit(line, " ".r, 2, splitLine.length))
+		if (splitLine.length != 2) Left(WrongFixedSplit(line, " ".r, 2, splitLine.length))
 		else Try(splitLine(1).toInt).toEither.left.map(err =>
 			NaN(splitLine(1))
 		).map(n => (Command.of(splitLine.head), n))
