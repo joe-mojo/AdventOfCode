@@ -1,5 +1,6 @@
 package org.jro.adventofcode.y2024
 
+import org.jro.adventofcode.y2024.Day7.Operator.{`*`, `+`}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
@@ -11,6 +12,9 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 class Day7Spec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks {
 	import Day7._
 	"Day7" - {
+
+		def generateExpressions1 = generateExpressions(Set(`+`, `*`))
+
 		"with sample input" - {
 			// 190 has 1 solution, 3267 has 2 solutions and 292 has one.
 			val sampleInput = """190: 10 19
