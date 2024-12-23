@@ -3,7 +3,7 @@ package org.jro.adventofcode.y2024
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
-class Day8Spec extends extends AnyFreeSpec with Matchers {
+class Day8Spec extends AnyFreeSpec with Matchers {
 	val sampleInput = """............
 						|........0...
 						|.....0......
@@ -19,13 +19,13 @@ class Day8Spec extends extends AnyFreeSpec with Matchers {
 	
 	val sampleWith2Antennas = """..........
 								|...#...... // (Xa1= X1 - (X2-X1), Ya1= Y1 - (Y2-Y1)) = (4 - (5-4), 3 - (5-3)) = (3, 1)
-								|..........
+								|.......... //                                          (5 - (4-5), 5 - (3-5)) = (6, 7)
 								|....a..... // (X1=4, Y1=3)
 								|..........
 								|.....a.... // (X2=5, Y2=5)
 								|..........
 								|......#... //(Xa2= X2 + (X2-X1), Ya2= Y2 + (Y2-Y1)) = (5 + (5-4), 5 + (5-3)) = (6, 7)
-								|..........
+								|.......... //										   (4 + (4-5), 3 + (3-5)) = (3, 1)
 								|..........""".stripMargin
 	
 	val sampleWith2Antennas2 = """..........
@@ -40,6 +40,11 @@ class Day8Spec extends extends AnyFreeSpec with Matchers {
 								 |..........""".stripMargin
 	
 	"Day8" - {
-		""
+		"puzzle2" - {
+			"with sample input" in {
+				val sampleField = Day8.parseField(sampleInput)
+				Day8.puzzle2(sampleField) shouldBe 34
+			}
+		}
 	}
 }

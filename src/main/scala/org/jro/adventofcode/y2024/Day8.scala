@@ -3,6 +3,7 @@ package org.jro.adventofcode.y2024
 import org.jro.adventofcode
 import org.jro.adventofcode.Error.IOError
 
+import scala.annotation.tailrec
 import scala.util.Using
 
 object Day8 {
@@ -27,6 +28,28 @@ object Day8 {
 		def antennaPairs: Set[(Antenna, Antenna)] = antennas.groupBy(_._2.frequencyId).values.flatMap { oneFreqAntennas =>
 			oneFreqAntennas.values.toSeq.combinations(2).map { case Seq(antenna1, antenna2) => (antenna1, antenna2) }
 		}.toSet
+
+		def withAntinodes: Field = copy(antinodes = antennaPairs.flatMap { case (antenna1, antenna2) => antinodesAround(antenna1, antenna2) })
+
+		def withAntinodesEchoes: Field = copy(antinodes = antennaPairs.flatMap{ case (antenna1, antenna2) => Field.generateAntinodesWithEchoes(antenna1, antenna2, sideLength) })
+
+	}
+
+	object Field {
+		def generateAntinodesWithEchoes(antenna1: Antenna, antenna2: Antenna, fieldSideLength: Int): Set[Antinode] = {
+			@tailrec
+			def generateAntinodesWithEchoesRec(location1: Location, location2: Location, antinodes: Set[Antinode]): Set[Antinode] = {
+				val newAntinode = Antinode(Location(location2.x + (location2.x - location1.x), location2.y + (location2.y - location1.y)))
+				if (newAntinode.location.x < 0 || newAntinode.location.y < 0 || newAntinode.location.x >= fieldSideLength || newAntinode.location.y >= fieldSideLength) {
+					antinodes
+				} else {
+					generateAntinodesWithEchoesRec(location2, newAntinode.location, antinodes + newAntinode)
+				}
+			}
+			generateAntinodesWithEchoesRec(antenna1.location, antenna2.location, Set.empty) ++
+					generateAntinodesWithEchoesRec(antenna2.location, antenna1.location, Set.empty) +
+					Antinode(antenna1.location) + Antinode(antenna2.location)
+		}
 	}
 
 	def parseField(lines: IndexedSeq[String]): Field = {
@@ -38,17 +61,17 @@ object Day8 {
 					tileLoc -> Antenna(tileLoc, char)
 			}
 		}.toMap
-		/*val antinodes = lines.tail.drop(sideLength + 1).take(sideLength).zipWithIndex.flatMap { (line, y) =>
-			line.zipWithIndex.collect { case ('X', x) => Location(x, y) }
-		}.toSet*/
 
 		Field(sideLength, antennas)
 	}
 
 
 	def puzzle1(field: Field): Int = {
-		//TODO: Implement puzzle 1
-		0
+		field.withAntinodes.antinodes.size
+	}
+
+	def puzzle2(field: Field): Int = {
+		field.withAntinodesEchoes.antinodes.size
 	}
 
 
@@ -59,8 +82,8 @@ object Day8 {
 			}.toEither.left.map(throwable => IOError(inputData.resource, throwable))
 		} match
 			case Right(initialField) =>
-				println(s"Puzzle 1 = ${puzzle1(initialField)}")
-			//println(s"Puzzle 2 = ${puzzle2(initialField)}")
+				println(s"Puzzle 1 = ${puzzle1(initialField)}") // 291 OK
+				println(s"Puzzle 2 = ${puzzle2(initialField)}") // 1015 OK
 			case Left(error) =>
 				println(s"Error: $error")
 	}
