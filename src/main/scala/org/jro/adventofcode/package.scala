@@ -7,7 +7,7 @@ import java.io.{BufferedWriter, File, FileWriter, StringWriter}
 import java.nio.file.Path
 import java.time.Year
 import scala.io.Source
-import scala.util.Try
+import scala.util.{Try, Using}
 
 package object adventofcode {
 	type Result[T] = Either[Error, T]
@@ -79,5 +79,30 @@ package object adventofcode {
 				println(s"Puzzle 2 = ${puzzle2(lines.iterator)}")
 			case Left(err) =>
 				println(s"Puzzle input didn't load ! Reason:\n $err")
+	}
+
+	def defaultInputTransformer(inputData: InputData): Either[Error, IndexedSeq[String]] = {
+		Try(inputData.source.getLines().toIndexedSeq).
+				toEither.left.map(throwable => IOError(inputData.resource, throwable))
+	}
+
+	def mainWithTransformer[R, I](year: Int)(
+			day: Int,
+			puzzle1: I => R = (iter: R) => ???,
+			puzzle2: I => R = (iter: R) => ???,
+			inputTransformer: InputData => Either[Error, I] = defaultInputTransformer
+	): Unit = {
+		getInputData(year, day).flatMap { inputData =>
+			Using(inputData) { inputData =>
+				inputTransformer(inputData).map { formatedInput =>
+					println(s"Puzzle 1 = ${puzzle1(formatedInput)}")
+					println(s"Puzzle 2 = ${puzzle2(formatedInput)}")
+				}
+			}.fold(throwable => Left(IOError(inputData.resource, throwable)), identity)
+		} match
+			case Right(_) =>
+				println("Done")
+			case Left(err) =>
+				println(s"Error: $err")
 	}
 }
