@@ -16,6 +16,7 @@ sealed trait SingleError extends Error {
 	infix def and(errors: Errors): Errors = {
 		Errors(this, errors.head +: errors.tail)
 	}
+	def asNEL: Errors = Errors(this)
 }
 sealed trait ErrorNEL extends Error {
 	def head : SingleError
