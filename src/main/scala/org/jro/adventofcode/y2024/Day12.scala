@@ -22,15 +22,60 @@ object Day12 {
 	sealed trait Plow {
 		def coords: Coords
 		def label: Char
+		def hasTopFence: Boolean
+		def hasBottomFence: Boolean
+		def hasRightFence: Boolean
+		def hasLeftFence: Boolean
+		def hasFences: Boolean
 	}
-	case class LocatedPlow(override val coords: Coords, override val label: Char, fences: Byte, neighboursCoords: Set[Coords]) extends Plow
+	case class LocatedPlow(override val coords: Coords, override val label: Char, fences: Byte, neighboursCoords: Set[Coords]) extends Plow {
+		override lazy val hasTopFence: Boolean = !neighboursCoords.contains(Coords(coords.x, coords.y - 1))
+		override lazy val hasBottomFence: Boolean = !neighboursCoords.contains(Coords(coords.x, coords.y + 1))
+		override lazy val hasRightFence: Boolean = !neighboursCoords.contains(Coords(coords.x + 1, coords.y))
+		override lazy val hasLeftFence: Boolean = !neighboursCoords.contains(Coords(coords.x - 1, coords.y))
+		override lazy val hasFences: Boolean = fences > 0
+	}
+	case class Side[S <: Side.Position](position: S, coords: Set[Coords])
+	object Side {
+		sealed trait Position
+		case object Top extends Position
+		case object Right extends Position
+		case object Bottom extends Position
+		case object Left extends Position
+	}
+	class SideAccumulator {
+		private val topSides: mutable.HashSet[Side[Side.Top.type]] = mutable.HashSet.empty
+		private val rightSides: mutable.HashSet[Side[Side.Right.type]] = mutable.HashSet.empty
+		private val bottomSides: mutable.HashSet[Side[Side.Bottom.type]] = mutable.HashSet.empty
+		private val leftSides: mutable.HashSet[Side[Side.Left.type]] = mutable.HashSet.empty
+
+		def addSide(side: Side[?]): SideAccumulator = {
+			side match {
+				case side@Side[Side.Top.type](Side.Top, _) => topSides += side
+				case side@Side[Side.Right.type](Side.Right, _) => rightSides += side
+				case side@Side[Side.Bottom.type](Side.Bottom, _) => bottomSides += side
+				case side@Side[Side.Left.type](Side.Left, _) => leftSides += side
+			}
+			this
+		}
+		def addPlow(plow: LocatedPlow): SideAccumulator = {
+			// TODO For each side type (Top, Right, Bottom, Left) for which the plow has a fence, add the plow to the existing side holding one of its neighbours of create the side
+
+			this
+		}
+	}
 	case class GardenPlot(plows: HashSet[LocatedPlow]) {
 		val id: String = GardenPlot.generateNextId(plows.head.label)
 		val area: Int = plows.size
 		def fences: Int = plows.toSeq.map(_.fences.toInt).sum
 		def fenceCost: Long = fences * area
-		def bulkFenceCost: Long = ??? // TODO
+		def bulkFenceCost: Long = sides.toLong * area
 		def sides: Int = ???
+		private def findSides(): Int = {
+
+			// TODO
+			???
+		}
 	}
 	object GardenPlot {
 		private val nextIdByLabel: MutableMap[Char, Int] = mutable.HashMap.empty

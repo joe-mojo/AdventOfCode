@@ -15,30 +15,30 @@ class Day12Spec extends AnyFreeSpec with Matchers {
 						|EEEC""".stripMargin.split("\n").toIndexedSeq
 
 	private val largeSampleInput = """RRRRIICCFF
-							 |RRRRIICCCF
-							 |VVRRRCCFFF
-							 |VVRCCCJFFF
-							 |VVVVCJJCFE
-							 |VVIVCCJJEE
-							 |VVIIICJJEE
-							 |MIIIIIJJEE
-							 |MIIISIJEEE
-							 |MMMISSJEEE""".stripMargin.split("\n").toIndexedSeq
+									 |RRRRIICCCF
+									 |VVRRRCCFFF
+									 |VVRCCCJFFF
+									 |VVVVCJJCFE
+									 |VVIVCCJJEE
+									 |VVIIICJJEE
+									 |MIIIIIJJEE
+									 |MIIISIJEEE
+									 |MMMISSJEEE""".stripMargin.split("\n").toIndexedSeq
 
 	private val multipleOneSizedPlotsSampleInput = """OOOOO
-											 |OXOXO
-											 |OOOOO
-											 |OXOXO
-											 |OOOOO""".stripMargin.split("\n").toIndexedSeq
+													 |OXOXO
+													 |OOOOO
+													 |OXOXO
+													 |OOOOO""".stripMargin.split("\n").toIndexedSeq
 
 	private val subreditXloopSampleInput = """AAXXXXXXBB
-									 |AXXDDDEEXX
-									 |XXDDCCCEXX
-									 |XXDDCCCEEE
-									 |XXCCXXXXEE
-									 |XXCCFFGXXE
-									 |HXXFFGGXXH
-									 |HHXXXXXXHH""".stripMargin.split("\n").toIndexedSeq
+											 |AXXDDDEEXX
+											 |XXDDCCCEXX
+											 |XXDDCCCEEE
+											 |XXCCXXXXEE
+											 |XXCCFFGXXE
+											 |HXXFFGGXXH
+											 |HHXXXXXXHH""".stripMargin.split("\n").toIndexedSeq
 
 	"Day12" - {
 		"createPlows" - {
@@ -95,42 +95,46 @@ class Day12Spec extends AnyFreeSpec with Matchers {
 							gardenPlot.area shouldBe 12
 							gardenPlot.fences shouldBe 18
 							gardenPlot.fenceCost shouldBe 216
-						/*case "I0000000000" =>
-							gardenPlot.area shouldBe 10
-							gardenPlot.fences shouldBe 30
-							gardenPlot.fenceCost shouldBe 300
+						case "I0000000000" =>
+							gardenPlot.area shouldBe 14
+							gardenPlot.fences shouldBe 22
+							gardenPlot.fenceCost shouldBe 308
+						case "I0000000001" =>
+							gardenPlot.area shouldBe 4
+							gardenPlot.fences shouldBe 8
+							gardenPlot.fenceCost shouldBe 32
+						case "C0000000001" =>
+							gardenPlot.area shouldBe 14
+							gardenPlot.fences shouldBe 28
+							gardenPlot.fenceCost shouldBe 392
 						case "C0000000000" =>
-							gardenPlot.area shouldBe 10
-							gardenPlot.fences shouldBe 30
-							gardenPlot.fenceCost shouldBe 300
+							gardenPlot.area shouldBe 1
+							gardenPlot.fences shouldBe 4
+							gardenPlot.fenceCost shouldBe 4
 						case "F0000000000" =>
 							gardenPlot.area shouldBe 10
-							gardenPlot.fences shouldBe 30
-							gardenPlot.fenceCost shouldBe 300
+							gardenPlot.fences shouldBe 18
+							gardenPlot.fenceCost shouldBe 180
 						case "V0000000000" =>
-							gardenPlot.area shouldBe 10
-							gardenPlot.fences shouldBe 30
-							gardenPlot.fenceCost shouldBe 300
+							gardenPlot.area shouldBe 13
+							gardenPlot.fences shouldBe 20
+							gardenPlot.fenceCost shouldBe 260
 						case "J0000000000" =>
-							gardenPlot.area shouldBe 10
-							gardenPlot.fences shouldBe 30
-							gardenPlot.fenceCost shouldBe 300
+							gardenPlot.area shouldBe 11
+							gardenPlot.fences shouldBe 20
+							gardenPlot.fenceCost shouldBe 220
 						case "E0000000000" =>
-							gardenPlot.area shouldBe 10
-							gardenPlot.fences shouldBe 30
-							gardenPlot.fenceCost shouldBe 300
+							gardenPlot.area shouldBe 13
+							gardenPlot.fences shouldBe 18
+							gardenPlot.fenceCost shouldBe 234
 						case "M0000000000" =>
-							gardenPlot.area shouldBe 10
-							gardenPlot.fences shouldBe 30
-							gardenPlot.fenceCost shouldBe 300
+							gardenPlot.area shouldBe 5
+							gardenPlot.fences shouldBe 12
+							gardenPlot.fenceCost shouldBe 60
 						case "S0000000000" =>
-							gardenPlot.area shouldBe 10
-							gardenPlot.fences shouldBe 30
-							gardenPlot.fenceCost shouldBe 300
-						case "I0000000000" =>
-							gardenPlot.area shouldBe 10
-							gardenPlot.fences shouldBe 30
-							gardenPlot.fenceCost shouldBe 300*/
+							gardenPlot.area shouldBe 3
+							gardenPlot.fences shouldBe 8
+							gardenPlot.fenceCost shouldBe 24
 						case _ => ()
 				}
 				field.fenceCost shouldBe 1930
@@ -211,7 +215,7 @@ class Day12Spec extends AnyFreeSpec with Matchers {
 				}
 			}
 		}
-		"should creadt field for small subredit sampl" in {
+		"should create field for small subredit sampl" in {
 			val input = """BBBA
 						  |BBAA
 						  |BBAC
