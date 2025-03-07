@@ -29,10 +29,12 @@ object Day12 {
 		val area: Int = plows.size
 		def fences: Int = plows.toSeq.map(_.fences.toInt).sum
 		def fenceCost: Long = fences * area
+		def bulkFenceCost: Long = ??? // TODO
+		def sides: Int = ???
 	}
 	object GardenPlot {
 		private val nextIdByLabel: MutableMap[Char, Int] = mutable.HashMap.empty
-		def generateNextId(label: Char): String = {
+		private def generateNextId(label: Char): String = {
 			label.toString + String.format("%010d", nextIdByLabel.get(label) match {
 				case Some(id) =>
 					nextIdByLabel(label) = id + 1
@@ -47,12 +49,12 @@ object Day12 {
 
 		val gardenPlots: Set[GardenPlot] = findGardenPlots()
 
-		def findGardenPlots(): Set[GardenPlot] = {
+		private def findGardenPlots(): Set[GardenPlot] = {
 			val visitedPlows = mutable.HashSet.empty[LocatedPlow]
 			plows.values.flatMap(plow => findGardenPlotOf(plow, visitedPlows)).toSet
 		}
 
-		def findGardenPlotOf(plow: LocatedPlow, visitedPlows: mutable.HashSet[LocatedPlow]): Option[GardenPlot] = {
+		private def findGardenPlotOf(plow: LocatedPlow, visitedPlows: mutable.HashSet[LocatedPlow]): Option[GardenPlot] = {
 			if(visitedPlows.contains(plow)) {
 				None
 			} else {
@@ -73,10 +75,11 @@ object Day12 {
 
 		def fenceCost: Long = gardenPlots.toSeq.map(_.fenceCost).sum
 
+		def bulkFenceCost: Long = gardenPlots.toSeq.map(_.bulkFenceCost).sum
 	}
 
 
-	def countFences(field: IndexedSeq[String], x: Int, y: Int): Byte = {
+	private def countFences(field: IndexedSeq[String], x: Int, y: Int): Byte = {
 		(for {
 			(dx, dy) <- Seq((1, 0), (0, 1), (-1, 0), (0, -1))
 		} yield {
@@ -88,7 +91,7 @@ object Day12 {
 		}).sum.toByte
 	}
 
-	def collectNeighbourCoords(field: IndexedSeq[String], x: Int, y: Int): Set[Coords] = {
+	private def collectNeighbourCoords(field: IndexedSeq[String], x: Int, y: Int): Set[Coords] = {
 		(for {
 			(dx, dy) <- Seq((1, 0), (0, 1), (-1, 0), (0, -1))
 			(neighbourX, neighbourY) = (x + dx, y + dy)
@@ -98,7 +101,7 @@ object Day12 {
 	}
 
 
-	def parseInput(input: InputData): Either[Errors, IndexedSeq[String]] = {
+	private[y2024] def parseInput(input: InputData): Either[Errors, IndexedSeq[String]] = {
 		Try(input.source.getLines().toIndexedSeq).toEither.left.map(IOError(input.resource, _).asNEL)
 	}
 
@@ -117,7 +120,14 @@ object Day12 {
 		val field = Field(locatedPlows)
 		field.fenceCost
 	}
+
+	def puzzle2(input: IndexedSeq[String]): Long = {
+		val locatedPlows = createPlowsMap(input)
+		val field = Field(locatedPlows)
+		field.bulkFenceCost
+	}
+
 	def main(args: Array[String]): Unit = {
-		mainWithTransformer(12, puzzle1, (input: IndexedSeq[String]) => 0, parseInput)
+		mainWithTransformer(12, puzzle1, puzzle2, parseInput)
 	}
 }
