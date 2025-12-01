@@ -21,14 +21,16 @@ class Day1Spec extends AnyFreeSpec with Matchers {
 			  |R14
 			  |L82
 			  |""".stripMargin.split("\n").iterator.toSeq
+		def sampleInputDataD1: Iterator[Day1.WheelMove] = sampleInputD1.flatMap(Day1.WheelMove.unapply).map(Day1.WheelMove.apply).iterator
+
 		"puzzle1 with sample input" - {
 			"should give 3" in {
-				Day1.puzzle1(sampleInputD1.iterator) should be(3)
+				Day1.puzzle1(sampleInputDataD1) should be(3)
 			}
 		}
 		"puzzle2 with sample input" - {
-			"should give 0" in {
-				Day1.puzzle2(sampleInputD1.iterator) should be(6)
+			"should give 6" in {
+				Day1.puzzle2(sampleInputDataD1) should be(6)
 			}
 		}
 	}
