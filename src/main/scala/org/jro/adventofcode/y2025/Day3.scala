@@ -110,5 +110,5 @@ object Day3 {
 	}
 
 	def main(args: Array[String]): Unit = adventofcode.y2025.mainWithTransformer(3, puzzle1 , puzzle2 , parseInput)
-	//OK: 1) 17432	2) 173065202451341 in ~2015ms (parallelism enables) or ~4900ms (no parallelism)
+	//OK: 1) 17432	2) 173065202451341 in ~2015ms (parallelism enabled) or ~4900ms (no parallelism)
 }
