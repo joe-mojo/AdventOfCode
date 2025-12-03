@@ -25,12 +25,12 @@ class Day1Spec extends AnyFreeSpec with Matchers {
 
 		"puzzle1 with sample input" - {
 			"should give 3" in {
-				Day1.puzzle1(sampleInputDataD1) should be(3)
+				Day1.puzzle1(sampleInputDataD1.toSeq) should be(3)
 			}
 		}
 		"puzzle2 with sample input" - {
 			"should give 6" in {
-				Day1.puzzle2(sampleInputDataD1) should be(6)
+				Day1.puzzle2(sampleInputDataD1.toSeq) should be(6)
 			}
 		}
 	}
