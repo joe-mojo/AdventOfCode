@@ -29,6 +29,7 @@ object Error {
 	sealed trait ThrowableError extends SingleError {
 		def throwable: Throwable
 	}
+	case class UnexpectedError(override val throwable: Throwable) extends SingleError with ThrowableError
 	case class ResourceNotFound(override val input: String) extends InputError
 	case class IOError(override val input: String, override val throwable: Throwable) extends InputError with ThrowableError
 	case class NotMatching(override val input: String, regex: Regex) extends InputError
