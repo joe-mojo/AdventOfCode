@@ -6,13 +6,13 @@ import scala.collection.mutable
 import scala.collection.Map
 
 object Day10 {
-	sealed trait InputError{
+	private[y2021] sealed trait InputError{
 		def input: String
 	}
-	case class ParseError(override val input: String, at: Int, found: String, expected: String) extends InputError {
+	private[y2021] case class ParseError(override val input: String, at: Int, found: String, expected: String) extends InputError {
 		override val toString: String = s"""Parse error for input "$input" at $at\n\tFound: "$found"\texpected: "$expected""""
 	}
-	case class IncompleteInput(override val input: String, remaingOpened: String) extends InputError
+	private[y2021] case class IncompleteInput(override val input: String, remaingOpened: String) extends InputError
 
 
 	val opening = IndexedSeq('<', '(', '[', '{')
@@ -33,7 +33,7 @@ object Day10 {
 
 
 
-	def checkLine(line: String): Option[InputError] = {
+	private[y2021] def checkLine(line: String): Option[InputError] = {
 		val bracketStack = mutable.Stack.empty[Char]
 		val maybeLineErr: Option[InputError] = line.zipWithIndex.foldLeft(Option.empty[InputError]) { (status, charAndIndex) =>
 			if(status.nonEmpty) status
@@ -62,14 +62,14 @@ object Day10 {
 		}
 	}
 
-	def parseErrScore(err: InputError): Long = {
+	private def parseErrScore(err: InputError): Long = {
 		err match {
 			case ParseError(_, _, found, _) => parseErrScoreMap(found.head)
 			case IncompleteInput(_, _) => 0L
 		}
 	}
 
-	def incompleteInputScore(err: InputError): Long = {
+	private def incompleteInputScore(err: InputError): Long = {
 		err match {
 			case iierr@IncompleteInput(_, _) =>
 				fix(iierr).foldLeft(0L){ (total, c) =>
@@ -80,7 +80,7 @@ object Day10 {
 		}
 	}
 
-	def fix(err: IncompleteInput): String = {
+	private def fix(err: IncompleteInput): String = {
 		err.remaingOpened.map(c => closing(opening.indexOf(c)))
 	}
 

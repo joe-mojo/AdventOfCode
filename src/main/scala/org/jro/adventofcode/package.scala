@@ -1,7 +1,7 @@
 package org.jro
 
 import java.net.URL
-import org.jro.adventofcode.Error.{IOError, NaN, ResourceNotFound}
+import org.jro.adventofcode.Error.{IOError, NaN, ResourceNotFound, ThrowableError}
 
 import java.io.{BufferedWriter, File, FileWriter, StringWriter}
 import java.nio.file.Path
@@ -102,6 +102,8 @@ package object adventofcode {
 		} match
 			case Right(_) =>
 				println("Done")
+			case Left(err:ThrowableError) =>
+				println(s"Error: ${err}\nStack trace:\n${err.throwable.getStackTrace.toList.mkString("\t", "\n\t", "")}")
 			case Left(err) =>
 				println(s"Error: $err")
 	}
