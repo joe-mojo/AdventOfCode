@@ -28,8 +28,16 @@ package object adventofcode {
 		s"${year}/day${day}/input"
 	}
 
+	def getTestResourceNameOf(year: Int, day: Int, label: String): String = {
+		s"${year}/day${day}/${label}_input"
+	}
+
 	def getInputSourceOf(year: Int, day: Int): Either[Error, Source] = {
 		getSource(getResourceNameOf(year, day))
+	}
+
+	def getTestInputSourceOf(year: Int, day: Int, label: String): Either[Error, Source] = {
+		getSource(getTestResourceNameOf(year, day, label))
 	}
 
 	case class InputData(year: Int, day: Int, resource: String, source: Source) extends AutoCloseable {
@@ -37,6 +45,12 @@ package object adventofcode {
 	}
 	def getInputData(year: Int, day: Int): Either[Error, InputData] = {
 		val resource = getResourceNameOf(year, day)
+		getSource(resource).map { source =>
+			InputData(year, day, resource, source)
+		}
+	}
+	def getTestInputData(year: Int, day: Int, label: String): Either[Error, InputData] = {
+		val resource = getTestResourceNameOf(year, day, label)
 		getSource(resource).map { source =>
 			InputData(year, day, resource, source)
 		}
