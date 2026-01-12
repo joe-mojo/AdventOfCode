@@ -1,12 +1,12 @@
 package org.jro.adventofcode.y2025
 
-import org.scalatest.{EitherValues, Inside}
+import org.jro.adventofcode.*
+import org.scalatest.EitherValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
-import org.jro.adventofcode.*
 
-class Day6Spec extends AnyFreeSpec with Matchers with Inside with TableDrivenPropertyChecks with EitherValues {
+class Day6Spec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks with EitherValues {
 
 	"Day6" - {
 		"Problem" - {
